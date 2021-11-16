@@ -4,10 +4,11 @@
 CREATE DATABASE IF NOT EXISTS `MailOrderingSystem` ;
 USE `MailOrderingSystem` ;
 
+
 -- -----------------------------------------------------
 -- Table `MailOrderingSystem`.`EMPLOYEE`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `EMPLOYEE` (
+CREATE TABLE IF NOT EXISTS `Employee` (
   `Employee_ID` INT NOT NULL AUTO_INCREMENT,
   `First_name` VARCHAR(350) NULL,
   `Last_name` VARCHAR(350) NULL,
@@ -16,21 +17,22 @@ CREATE TABLE IF NOT EXISTS `EMPLOYEE` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `MailOrderingSystem`.`ORDER_STATUS`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ORDER_STATUS` (
-  `Status_ID` INT NOT NULL AUTO_INCREMENT,
-  `Status` VARCHAR(8) NULL,
-  `Date` DATE NULL,
-  PRIMARY KEY (`Status_ID`))
-ENGINE = InnoDB;
+-- REMOVED FOR SEMPLICITY SAKE
+-- -- -----------------------------------------------------
+-- -- Table `MailOrderingSystem`.`ORDER_STATUS`
+-- -- -----------------------------------------------------
+-- CREATE TABLE IF NOT EXISTS `ORDER_STATUS` (
+--   `Status_ID` INT NOT NULL AUTO_INCREMENT,
+--   `Status` VARCHAR(8) NULL,
+--   `Date` DATE NULL,
+--   PRIMARY KEY (`Status_ID`))
+-- ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `MailOrderingSystem`.`CUSTOMER`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `CUSTOMER` (
+ CREATE TABLE IF NOT EXISTS `Customer` (
   `Customer_ID` INT NOT NULL AUTO_INCREMENT,
   `First_name` VARCHAR(350) NULL,
   `Last_name` VARCHAR(350) NULL,
@@ -40,40 +42,34 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `MailOrderingSystem`.`ORDER`
+-- Table `MailOrderingSystem`.`ORDER_LIST`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ORDER` (
+CREATE TABLE IF NOT EXISTS `Order_list` ( -- replaces ORDER
   `Order_ID` INT NOT NULL AUTO_INCREMENT,
   `Date_of_receipt` DATE NULL,
   `Employee_ID` INT NOT NULL,
   `Customer_ID` INT NOT NULL,
   `Status_ID` INT NOT NULL,
+  `Actual_ship` DATE NULL,   -- actual_ship and planned_ship were added to substitute the Status_ID and its related ORDER_STATUS table,
+  `Planned_ship` DATE NULL,  -- it was making everything a bit complex for me so I decided to keep it simple and change the structure of the DB
   PRIMARY KEY (`Order_ID`),
-  INDEX `Employee_ID_idx` (`Employee_ID` ASC) VISIBLE,
-  INDEX `Status_ID_idx` (`Status_ID` ASC) VISIBLE,
-  INDEX `Customer_ID_idx` (`Customer_ID` ASC) VISIBLE,
   CONSTRAINT `Employee_ID`
     FOREIGN KEY (`Employee_ID`)
-    REFERENCES `EMPLOYEE` (`Employee_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Status_ID`
-    FOREIGN KEY (`Status_ID`)
-    REFERENCES `ORDER_STATUS` (`Status_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `Employee` (`Employee_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `Customer_ID`
     FOREIGN KEY (`Customer_ID`)
-    REFERENCES `CUSTOMER` (`Customer_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `Customer` (`Customer_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `MailOrderingSystem`.`PART`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PART` (
+CREATE TABLE IF NOT EXISTS `Part` (
   `Part_ID` INT NOT NULL,
   `Part_name` VARCHAR(100) NULL,
   `Price` DOUBLE NOT NULL,
@@ -85,21 +81,19 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `MailOrderingSystem`.`ORDER_PART`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ORDER_PART` (
+CREATE TABLE IF NOT EXISTS `Order_part` (
   `Order_ID` INT NOT NULL,
   `Part_ID` INT NOT NULL,
   `Quantity_in_cart` INT NOT NULL CHECK (`Quantity_in_cart` >= 0) DEFAULT 0,
   PRIMARY KEY (`Order_ID`, `Part_ID`),
-  INDEX `Part_ID_idx` (`Part_ID` ASC) VISIBLE,
-  INDEX `Order_ID_idx` (`Order_ID` ASC) VISIBLE,
   CONSTRAINT `Order_ID`
     FOREIGN KEY (`Order_ID`)
-    REFERENCES `ORDER` (`Order_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `Order_list` (`Order_ID`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
   CONSTRAINT `Part_ID`
     FOREIGN KEY (`Part_ID`)
-    REFERENCES `PART` (`Part_ID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `Part` (`Part_ID`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
 ENGINE = InnoDB;
