@@ -1,10 +1,13 @@
+-- WARNING! RESET THE DATABASE
+######################################
+## DROP DATABASE MailOrderingSystem ##
+######################################
+
 -- -----------------------------------------------------
 -- Schema MailOrderingSystem
 -- -----------------------------------------------------
 CREATE DATABASE IF NOT EXISTS `MailOrderingSystem` ;
 USE `MailOrderingSystem` ;
-
--- DROP DATABASE MailOrderingSystem
 
 -- -----------------------------------------------------
 -- Table `MailOrderingSystem`.`EMPLOYEE`
