@@ -56,13 +56,13 @@ CREATE TABLE IF NOT EXISTS `Order_list` ( -- replaces ORDER
   CONSTRAINT `Employee_ID`
     FOREIGN KEY (`Employee_ID`)
     REFERENCES `Employee` (`Employee_ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
   CONSTRAINT `Customer_ID`
     FOREIGN KEY (`Customer_ID`)
     REFERENCES `Customer` (`Customer_ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON DELETE CASCADE -- customers can be deleted from the database
+    ON UPDATE RESTRICT) -- their id cannot be updated 
 ENGINE = InnoDB;
 
 
@@ -89,16 +89,20 @@ CREATE TABLE IF NOT EXISTS `Order_part` (
   CONSTRAINT `Order_ID`
     FOREIGN KEY (`Order_ID`)
     REFERENCES `Order_list` (`Order_ID`)
-    ON DELETE CASCADE,
+    ON DELETE CASCADE -- deletion of order id will result in cancelling of order 
+    ON UPDATE RESTRICT, -- order id cannot be updated
   CONSTRAINT `Part_ID`
     FOREIGN KEY (`Part_ID`)
     REFERENCES `Part` (`Part_ID`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE -- parts can be removed from db
+    ON UPDATE RESTRICT)  -- part id cannot be updated
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Data Insertion -- mockaroo was used to generate data
+-- Data Insertion -- 
+-- mockaroo was used to generate data, but some of the
+-- colums have been manually modified
 -- -----------------------------------------------------
 
 INSERT INTO Employee (Employee_ID, First_name, Last_name, ZIP_code) VALUES 
