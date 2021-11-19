@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS `Order_list` ( -- replaces ORDER
   `Employee_ID` INT NOT NULL,
   `Customer_ID` INT NOT NULL,
   `Date_of_receipt` DATE NOT NULL,
-  `Actual_ship` DATE NULL,   -- actual_ship and planned_ship were added to substitute the Status_ID and its related ORDER_STATUS table,
   `Planned_ship` DATE NOT NULL,  -- it was making everything a bit complex for me so I decided to keep it simple and change the structure of the DB
+  `Actual_ship` DATE NULL,   -- actual_ship and planned_ship were added to substitute the Status_ID and its related ORDER_STATUS table,
   PRIMARY KEY (`Order_ID`),
   CONSTRAINT `Employee_ID`
     FOREIGN KEY (`Employee_ID`)
@@ -130,11 +130,11 @@ INSERT INTO Part (Part_ID, Part_name, Price, Quantity_in_stock) VALUES
 (9, 'Steel', 8.24, 24), (10, 'Wood', 3.39, 17);
 
 INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_ship, Actual_ship) VALUES 
-(1, 1, 2, '2021-07-13', '2021-07-16', '2021-07-21'), (2, 2, 3, '2021-08-16', '2021-08-19', '2020-08-30'),
-(3, 3, 4, '2019-03-22', '2020-03-30', NULL), (4, 4, 5, '2019-03-12', '2019-03-14', '2019-03-22'),
-(5, 5, 6, '2020-11-19', '2019-12-02', NULL), (6, 6, 7, '2019-08-17', '2019-08-20', '2020-08-23'),
+(1, 1, 2, '2021-07-13', '2021-07-16', '2021-07-21'), (2, 2, 3, '2021-08-16', '2021-08-19', '2021-08-30'),
+(3, 3, 4, '2020-03-22', '2020-03-30', NULL), (4, 4, 5, '2019-03-12', '2019-03-14', '2019-03-22'),
+(5, 5, 6, '2020-11-19', '2020-12-02', NULL), (6, 6, 7, '2019-08-17', '2019-08-20', '2019-08-23'),
 (7, 7, 8, '2019-01-09', '2019-01-10', '2019-02-02'), (8, 8, 9, '2018-12-17', '2018-12-19', NULL),
-(9, 9, 10, '2021-09-17', '2021-09-19', '2021-09-20'), (10, 10, 1, '2019-10-02', '2021-10-09', NULL);
+(9, 9, 10, '2021-09-17', '2021-09-19', '2021-09-20'), (10, 10, 1, '2021-10-02', '2021-10-09', NULL);
 
 INSERT INTO Order_part (Part_ID, Order_ID, Quantity_in_cart) VALUES 
 (1, 2, 100), (3, 2, 23), (10, 4, 11), (10, 6, 33), (7, 5, 3),
