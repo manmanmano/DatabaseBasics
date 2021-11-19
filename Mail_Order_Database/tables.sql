@@ -127,7 +127,7 @@ INSERT INTO Part (Part_ID, Part_name, Price, Quantity_in_stock) VALUES
 (3, 'Steel', 9.43, 438), (4, 'Stone', 1.69, 492),
 (5, 'Plexiglass', 9.39, 305), (6, 'Steel', 8.74, 274),
 (7, 'Brass', 4.18, 89), (8, 'Rubber', 9.73, 49),
-(9, 'Steel', 8.24, 24), (10, 'Wood', 3.39, 17);
+(9, 'Steel', 8.24, 24), (10, 'Wood', 3.39, 123);
 
 INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_ship, Actual_ship) VALUES 
 (1, 1, 2, '2021-07-13', '2021-07-16', '2021-07-21'), (2, 2, 3, '2021-08-16', '2021-08-19', '2021-08-30'),
@@ -137,5 +137,5 @@ INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_
 (9, 9, 10, '2021-09-17', '2021-09-19', '2021-09-20'), (10, 10, 1, '2021-10-02', '2021-10-09', NULL);
 
 INSERT INTO Order_part (Part_ID, Order_ID, Quantity_in_cart) VALUES 
-(1, 2, 100), (3, 2, 23), (10, 4, 11), (10, 6, 33), (7, 5, 3),
-(9, 8, 29), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 2, 17);
+(1, 2, 100), (3, 10, 23), (10, 4, 11), (10, 6, 33), (7, 5, 3),
+(9, 8, 7), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 2, 17);
