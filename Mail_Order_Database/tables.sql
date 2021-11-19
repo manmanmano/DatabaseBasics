@@ -140,4 +140,4 @@ INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_
 
 INSERT INTO Order_part (Part_ID, Order_ID, Quantity_in_cart) VALUES 
 (1, 2, 100), (3, 10, 23), (10, 4, 11), (10, 6, 33), (7, 5, 3),
-(9, 8, 7), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 2, 17);
+(9, 8, 7), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 9, 17);
