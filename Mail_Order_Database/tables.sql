@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `Part` (
   `Part_ID` INT NOT NULL,
   `Part_name` VARCHAR(100) NOT NULL,
   `Price` DOUBLE NOT NULL,
-  `Quantity_in_stock` INT NOT NULL CHECK (`Quantity_in_stock` >= 0) DEFAULT 0,
+  `Quantity_in_stock` INT NOT NULL 
+  CHECK (`Quantity_in_stock` >= 0) DEFAULT 0,
   PRIMARY KEY (`Part_ID`))
 ENGINE = InnoDB;
 
@@ -87,7 +88,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Order_part` (
   `Order_ID` INT NOT NULL,
   `Part_ID` INT NOT NULL,
-  `Quantity_in_cart` INT NOT NULL CHECK (`Quantity_in_cart` >= 0) DEFAULT 0,
+  `Quantity_in_cart` INT NOT NULL CHECK 
+  (`Quantity_in_cart` >= 0) DEFAULT 0,
   PRIMARY KEY (`Order_ID`, `Part_ID`),
   CONSTRAINT `Order_ID`
     FOREIGN KEY (`Order_ID`)
@@ -126,7 +128,7 @@ INSERT INTO Part (Part_ID, Part_name, Price, Quantity_in_stock) VALUES
 (1, 'Wood', 2.93, 360), (2, 'Aluminum', 2.3, 431),
 (3, 'Steel', 9.43, 438), (4, 'Stone', 1.69, 492),
 (5, 'Plexiglass', 9.39, 305), (6, 'Steel', 8.74, 274),
-(7, 'Brass', 4.18, 89), (8, 'Rubber', 9.73, 49),
+(7, 'Brass', 4.18, 891), (8, 'Rubber', 9.73, 453),
 (9, 'Steel', 8.24, 24), (10, 'Wood', 3.39, 123);
 
 INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_ship, Actual_ship) VALUES 
