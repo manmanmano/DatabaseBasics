@@ -23,9 +23,10 @@ SELECT * FROM OrdersInSpecificTimeRange;
 -- -----------------------------------------------------
 
 # N.B: I was not sure what I had to find with the function if either the number of items
-# in the select statement or the number of items in an order so I did them both
+# in the select statement (number of items the first query may require)  or the number 
+# of items in an order so I did them both
 
-# First function - finds items in the SELECT statement 
+# First function - finds number of items the first query may require 
 DELIMITER // 
 CREATE FUNCTION FindItemsInQuery(NAME_OF_VIEW VARCHAR(500))
   RETURNS DECIMAL 
@@ -39,7 +40,7 @@ DELIMITER ;
 
 SELECT FindItemsInQuery('OrdersInSpecificTimeRange') AS nItems;
 
-# Second function - finds number of items in an order
+# Second function - finds number of items in a period of time
 DELIMITER // 
 CREATE FUNCTION GetNumberOfItems(SD DATE, ED DATE) -- SD - Start date, ED - End date 
   RETURNS DECIMAL 
