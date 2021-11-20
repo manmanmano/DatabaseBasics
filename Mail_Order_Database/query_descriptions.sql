@@ -17,10 +17,29 @@ CREATE VIEW OrdersInSpecificTimeRange AS
 SELECT * FROM OrdersInSpecificTimeRange;
 
 
+
 -- -----------------------------------------------------
 -- Function
 -- -----------------------------------------------------
 
+# N.B: I was not sure what I had to find with the function if either the number of items
+# in the select statement or the number of items in an order so I did them both
+
+# First function - finds items in the SELECT statement 
+DELIMITER // 
+CREATE FUNCTION FindItemsInQuery(NAME_OF_VIEW VARCHAR(500))
+  RETURNS DECIMAL 
+  READS SQL DATA
+  BEGIN 
+    RETURN IFNull((SELECT COUNT(*) AS NumberOfItems
+                    FROM information_schema.columns
+                   WHERE table_name = NAME_OF_VIEW), 0); 
+  END // 
+DELIMITER ;
+
+SELECT FindItemsInQuery('OrdersInSpecificTimeRange') AS nItems;
+
+# Second function - finds number of items in an order
 DELIMITER // 
 CREATE FUNCTION GetNumberOfItems(SD DATE, ED DATE) -- SD - Start date, ED - End date 
   RETURNS DECIMAL 
@@ -33,9 +52,9 @@ CREATE FUNCTION GetNumberOfItems(SD DATE, ED DATE) -- SD - Start date, ED - End 
   END // 
 DELIMITER ; 
 
-SELECT GetNumberOfItems('2021-01-01', '2021-12-31') AS Ordered_items;
+SELECT GetNumberOfItems('2018-01-01', '2021-12-31') AS Ordered_items;
 
-DROP FUNCTION GetNumberOfItems;
+
 
 -- -----------------------------------------------------
 -- Stored procedure
