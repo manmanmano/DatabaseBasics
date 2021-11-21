@@ -27,20 +27,23 @@ SELECT * FROM OrdersInSpecificTimeRange;
 # of items in an order so I did them both
 
 # First function - finds number of items the first query may require 
+# Firstly create a view of the desired query and then type in the name of the view as a parameter
 DELIMITER // 
-CREATE FUNCTION FindItemsInQuery(NAME_OF_VIEW VARCHAR(500))
+CREATE FUNCTION FindQueryNeeds(nameOfView VARCHAR(500))
   RETURNS DECIMAL 
   READS SQL DATA
   BEGIN 
     RETURN IFNull((SELECT COUNT(*) AS NumberOfItems
                     FROM information_schema.columns
-                   WHERE table_name = NAME_OF_VIEW), 0); 
-  END // 
+                   WHERE table_name = nameOfView), 0); 
+  END// 
 DELIMITER ;
 
-SELECT FindItemsInQuery('OrdersInSpecificTimeRange') AS nItems;
+SELECT FindQueryNeeds('OrdersInSpecificTimeRange') AS nItems;
+SELECT FindQueryNeeds(NULL) AS nItems;
 
-# Second function - finds number of items in a period of time
+
+# Second function - finds number of items in a period of time -- not quantity but n times items are ordered
 DELIMITER // 
 CREATE FUNCTION GetNumberOfItems(SD DATE, ED DATE) -- SD - Start date, ED - End date 
   RETURNS DECIMAL 
@@ -50,10 +53,14 @@ CREATE FUNCTION GetNumberOfItems(SD DATE, ED DATE) -- SD - Start date, ED - End 
                     FROM Order_part OP
                     INNER JOIN Order_list OL ON OL.Order_ID = OP.Order_ID
                    WHERE OL.Date_of_receipt BETWEEN SD AND ED), 0); 
-  END // 
+  END// 
 DELIMITER ; 
 
 SELECT GetNumberOfItems('2018-01-01', '2021-12-31') AS Ordered_items;
+SELECT GetNumberOfItems(NULL, '2021-12-31') AS Ordered_items;
+SELECT GetNumberOfItems('2018-01-01', NULL) AS Ordered_items;
+SELECT GetNumberOfItems('2018-01-01', '2019-12-31') AS Ordered_items;
+SELECT GetNumberOfItems('2020-01-01', '2021-12-31') AS Ordered_items;
 
 
 
@@ -62,14 +69,21 @@ SELECT GetNumberOfItems('2018-01-01', '2021-12-31') AS Ordered_items;
 -- -----------------------------------------------------
 
 DELIMITER // 
-CREATE PROCEDURE GetWorkplaceCountByContact (firstName varchar(50)) 
+CREATE PROCEDURE GetOrderInfoByID (order_id INT) 
 BEGIN 
-  SET firstName = IFNULL(firstName, ''); 
+  SET order_id = IFNULL(order_id, 0); 
    
-  select C.FullName, Count(W.ID) AS NumberOfWorkplaces  
-    from Contact C LEFT OUTER JOIN  
-         Workplace W ON C.ID = W.ContactID 
-   where (firstName = '') OR (C.FirstName = firstName) 
-   group by C.FullName; 
+  SELECT P.Part_name, SUM(OP.Quantity_in_cart) AS Ordered_quantities, OL.Order_ID,
+  CONCAT(C.First_name, ' ', C.Last_name) AS Customer_fullname, C.ZIP_code AS Customer_ZIP
+	FROM Part P 
+    INNER JOIN Order_part OP ON OP.Part_ID = P.Part_ID
+    INNER JOIN Order_list OL ON OL.Order_ID = OP.Order_ID
+    INNER JOIN Customer C ON C.Customer_ID = OL.Customer_ID
+   WHERE OL.Order_ID = order_id 
+   GROUP BY OL.Order_ID, OP.Quantity_in_cart, P.Part_name, Customer_ZIP, Customer_fullname;
 END// 
 DELIMITER ;
+
+CALL GetOrderInfoByID(3);
+CALL GetOrderInfoByID(NULL);
+CALL GetOrderInfoByID(10);

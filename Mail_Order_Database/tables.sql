@@ -54,13 +54,13 @@ CREATE TABLE IF NOT EXISTS `Order_list` ( -- replaces ORDER
   `Customer_ID` INT NOT NULL,
   `Date_of_receipt` DATE NOT NULL,
   `Planned_ship` DATE NOT NULL,  -- it was making everything a bit complex for me so I decided to keep it simple and change the structure of the DB
-  `Actual_ship` DATE NULL,   -- actual_ship and planned_ship were added to substitute the Status_ID and its related ORDER_STATUS table,
+  `Actual_ship` DATE NULL,   -- actual_ship and planned_ship were added to substitute the Status_ID and its related ORDER_STATUS table
   PRIMARY KEY (`Order_ID`),
   CONSTRAINT `Employee_ID`
     FOREIGN KEY (`Employee_ID`)
     REFERENCES `Employee` (`Employee_ID`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
+    ON DELETE RESTRICT -- deleting an employee would result in deletion of order
+    ON UPDATE CASCADE, -- instead of deleting an employee we could just update its id
   CONSTRAINT `Customer_ID`
     FOREIGN KEY (`Customer_ID`)
     REFERENCES `Customer` (`Customer_ID`)
@@ -126,12 +126,12 @@ INSERT INTO Customer (Customer_ID, First_name, Last_name, ZIP_code) VALUES
 
 INSERT INTO Part (Part_ID, Part_name, Price, Quantity_in_stock) VALUES 
 (1, 'Wood', 2.93, 360), (2, 'Aluminum', 2.3, 431),
-(3, 'Steel', 9.43, 438), (4, 'Stone', 1.69, 492),
-(5, 'Plexiglass', 9.39, 305), (6, 'Steel', 8.74, 274),
+(3, 'Silver', 9.43, 438), (4, 'Stone', 1.69, 492),
+(5, 'Plexiglass', 9.39, 305), (6, 'Glass', 8.74, 274),
 (7, 'Brass', 4.18, 891), (8, 'Rubber', 9.73, 453),
-(9, 'Steel', 8.24, 24), (10, 'Wood', 3.39, 123);
+(9, 'Steel', 8.24, 204), (10, 'Wood', 3.39, 123);
 
-INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_ship, Actual_ship) VALUES 
+INSERT INTO Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_ship, Actual_ship) VALUES 
 (1, 1, 2, '2021-07-13', '2021-07-16', '2021-07-21'), (2, 2, 3, '2021-08-16', '2021-08-19', '2021-08-30'),
 (3, 3, 4, '2020-03-22', '2020-03-30', NULL), (4, 4, 5, '2019-03-12', '2019-03-14', '2019-03-22'),
 (5, 5, 6, '2020-11-19', '2020-12-02', NULL), (6, 6, 7, '2019-08-17', '2019-08-20', '2019-08-23'),
@@ -140,4 +140,5 @@ INSERT Order_list (Order_ID, Employee_ID, Customer_ID, Date_of_receipt, Planned_
 
 INSERT INTO Order_part (Part_ID, Order_ID, Quantity_in_cart) VALUES 
 (1, 2, 100), (3, 10, 23), (10, 4, 11), (10, 6, 33), (7, 5, 3),
-(9, 8, 7), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 9, 17);
+(9, 8, 7), (8, 1, 12), (5, 7, 11), (4, 3, 79), (4, 9, 17),
+(9, 10, 7), (8, 2, 12), (5, 2, 11);

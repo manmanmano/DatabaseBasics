@@ -19,7 +19,7 @@ FROM Customer C
 INNER JOIN Order_list OL ON OL.Customer_ID = C.Customer_ID
 INNER JOIN Order_part OP ON OP.Order_ID = OL.Order_ID
 INNER JOIN Part P ON P.Part_ID = OP.Part_ID
-WHERE OL.Date_of_receipt BETWEEN '2021-01-01' AND '2021-12-31'
+WHERE OL.Date_of_receipt BETWEEN '2018-01-01' AND '2021-12-31'
 GROUP BY OL.Order_ID, Customer_fullname, OL.Actual_ship, OL.Planned_ship
 ORDER BY OL.Order_ID ASC;
 
@@ -35,8 +35,8 @@ Select a single order and list:
 - ordered quantities
 */
 
-SELECT SUM(OP.Quantity_in_cart) AS Ordered_quantities, CONCAT(C.First_name, ' ', C.Last_name) AS Customer_fullname, 
-C.ZIP_code AS Customer_ZIP, OL.Order_ID, P.Part_name
+SELECT P.Part_name, SUM(OP.Quantity_in_cart) AS Ordered_quantities, OL.Order_ID,
+CONCAT(C.First_name, ' ', C.Last_name) AS Customer_fullname, C.ZIP_code AS Customer_ZIP
 FROM Part P
 INNER JOIN Order_part OP ON OP.Part_ID = P.Part_ID
 INNER JOIN Order_list OL ON OL.Order_ID = OP.Order_ID
