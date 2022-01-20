@@ -1,2 +1,2 @@
 # DatabaseBasics
-Contains assignments from the Database Basics course
+Contains the completed assignments from the Database Basics course at TalTech.
